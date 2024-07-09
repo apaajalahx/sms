@@ -32,7 +32,7 @@ class Contacts(db.Model, Serialize):
     __tablename__ = 'contacts'
     id: Mapped[int] = mapped_column(primary_key=True)
     phonenumber: Mapped[str]
-
+    
 
 class Templates(db.Model, Serialize):
     __tablename__ = 'templates'

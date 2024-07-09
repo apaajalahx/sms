@@ -30,7 +30,7 @@ def loginprocess():
     
     login_user(user, remember=False)
 
-    return redirect(url_for('dashboard.panel'))
+    return redirect(url_for('dashboard.index'))
 
 
 @auth.get('/logout')

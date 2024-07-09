@@ -10,7 +10,7 @@ if os.path.exists(path):
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI", "sqlite:///:memory")
     SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv("SQLALCHEMY_TRACK_MODIFICATIONS", True)
-
+    SECRET_KEY = os.getenv('SECRET_KEY', 'LlqFlLo6fGAYfn9')
 
 class Development(Config):
     DEBUG = True
