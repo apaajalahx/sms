@@ -1,0 +1,54 @@
+{% extends 'dashboard/base.html' %}
+
+{% block headerContent %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Add new Vonage Account</h1>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+          <!-- general form elements -->
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add Vonage Account</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form action="{{ url_for('setting.vonageaddPost') }}" method="POST">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Vonage Api Key.</label>
+                  <input type="text" name="vonage_api_key" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Vonage Secret Key.</label>
+                    <input type="text" name="vonage_api_secret" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Phone Number <i>*(Add +62, ex: +6281212121212).</i></label>
+                    <input type="text" name="phonenumber" class="form-control" required>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

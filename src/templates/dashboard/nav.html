@@ -27,7 +27,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ url_for('dashboard.index') }}" class="nav-link">
+            <a href="{{ url_for('template.index') }}" class="nav-link">
                 <i class="nav-icon fas fa-envelope"></i>
                 <p>
                 Template
@@ -44,19 +44,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../../index.html" class="nav-link">
+                <a href="{{ url_for('setting.twilioindex') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Twilio</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../index2.html" class="nav-link">
+                <a href="{{ url_for('setting.awsindex') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>AWS</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../index3.html" class="nav-link">
+                <a href="{{ url_for('setting.vonageindex') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Vonage</p>
                 </a>

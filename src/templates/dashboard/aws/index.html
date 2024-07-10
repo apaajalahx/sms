@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Contacts</h1>
+          <h1 class="m-0">Twilio</h1>
         </div>
       </div>
     </div>
@@ -20,8 +20,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-start">
-                        <a href="{{ url_for('contacts.importcontact') }}" class="btn btn-outline-primary">Import</a>
-                        <!-- <a href="" class="btn btn-outline-primary" style="margin-left: 10px;">Export</a> -->
+                        <a href="{{ url_for('setting.awsadd') }}" class="btn btn-outline-primary">Add New Aws Account</a>
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -30,6 +29,8 @@
                     <thead>
                     <tr>
                         <th class="text-center">ID</th>
+                        <th class="text-center">Access Key</th>
+                        <th class="text-center">Region</th>
                         <th class="text-center">Phone Number</th>
                         <th class="text-center">ACTION</th>
                     </tr>
@@ -37,11 +38,13 @@
                     <tbody>
                     {% for data in items %}
                         <tr>
-                            <td class="text-center">{{ data.id }}</td>
-                            <td class="text-center">{{ data.phonenumber }}</td>
+                            <td>{{ data.id }}</td>
+                            <td>{{ data.aws_access_key }}</td>
+                            <td>{{ data.aws_region }}</td>
+                            <td>{{ data.phonenumber }}</td>
                             <td>
                                 <div class="d-flex justify-content-center">
-                                    <a href="{{ url_for('contacts.remove', id=data.id) }}" class="btn btn-outline-danger">Remove</a>
+                                    <a href="{{ url_for('setting.awsremove', id=data.id) }}" class="btn btn-outline-danger">Remove</a>
                                 </div>
                             </td>
                         </tr>
@@ -56,12 +59,12 @@
                             <li class="page-item">
                                 <a 
                                 class="page-link{% if not pagination.has_prev %} disabled{% endif %}" 
-                                href="{% if pagination.has_prev %}{{ url_for('contacts.index', page=pagination.prev_num) }}{%else%}#{% endif %}">Prev</a>
+                                href="{% if pagination.has_prev %}{{ url_for('setting.awsindex', page=pagination.prev_num) }}{%else%}#{% endif %}">Prev</a>
                             </li>
                             <li class="page-item">
                                 <a 
                                 class="page-link{% if not pagination.has_next %} disabled{% endif %}" 
-                                href="{% if pagination.has_next %}{{ url_for('contacts.index', page=pagination.next_num) }}{%else%}#{% endif %}">Next</a>
+                                href="{% if pagination.has_next %}{{ url_for('setting.awsindex', page=pagination.next_num) }}{%else%}#{% endif %}">Next</a>
                             </li>
                         </ul>
                     </nav>

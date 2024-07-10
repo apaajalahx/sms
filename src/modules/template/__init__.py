@@ -1,9 +1,9 @@
 from flask import Blueprint
 from flask_login import login_required
 
-setting = Blueprint('setting', __name__)
+template = Blueprint('template', __name__)
 
-@setting.before_request
+@template.before_request
 @login_required
-def test():
+def before_request():
     pass

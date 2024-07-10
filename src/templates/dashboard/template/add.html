@@ -1,0 +1,46 @@
+{% extends 'dashboard/base.html' %}
+
+{% block headerContent %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Add new Template</h1>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+          <!-- general form elements -->
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add Message</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form action="{{ url_for('template.addpost') }}" method="POST">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Template Message <i>*(max 120 character).</i></label>
+                  <textarea maxlength="120" name="template" required class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

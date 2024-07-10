@@ -58,15 +58,7 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
+    {% block headerContent %}{% endblock %}
     <!-- /.content-header -->
 
     <!-- Main content -->
@@ -94,6 +86,28 @@
 <script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<link rel="stylesheet" href="{{ url_for('static', filename='plugins/sweetalert2/sweetalert2.min.css') }}">
+<script src="{{ url_for('static', filename='plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script>
+    {% for category, message in messages %}
+      {% if category == 'error'%}
+      Swal.fire({
+          icon: "error",
+          title: "{{ message }}"
+      })
+      {% elif category == 'info'%}
+      Swal.fire({
+              icon: "success",
+              title: "{{ message }}"
+      });
+      {% endif %}
+    {% endfor %}
+</script>
+{% endif %}
+{% endwith %}
 
 <!-- AdminLTE App -->
 <script src="{{ url_for('static', filename='js/adminlte.js') }}"></script>

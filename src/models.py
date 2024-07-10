@@ -37,6 +37,7 @@ class Contacts(db.Model, Serialize):
 class Templates(db.Model, Serialize):
     __tablename__ = 'templates'
     id: Mapped[int] = mapped_column(primary_key=True)
+    folder_name: Mapped[str]
     messages: Mapped[str]
 
 
@@ -63,3 +64,13 @@ class NexmoVonage(db.Model, Serialize):
     vonage_api_key: Mapped[str]
     vonage_api_secret: Mapped[str]
     phonenumber: Mapped[str]
+
+
+class ThreadingStatus(db.Model, Serialize):
+    __tablename__ = 'threading_status'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    is_active: Mapped[bool] = mapped_column(default=False)
+    completed: Mapped[bool] = mapped_column(default=False)
+    size: Mapped[int]
+    current_process: Mapped[int]
