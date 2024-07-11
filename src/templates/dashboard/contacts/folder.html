@@ -29,18 +29,19 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="text-center">Folder Name</th>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Phone Number</th>
                         <th class="text-center">ACTION</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for data in items %}
                         <tr>
-                            <td class="text-center">{{ data.folder_name }}</td>
+                            <td class="text-center">{{ data.id }}</td>
+                            <td class="text-center">{{ data.phonenumber }}</td>
                             <td>
                                 <div class="d-flex justify-content-center">
-                                    <a href="{{ url_for('contacts.folder', name=data.folder_name) }}" class="btn btn-outline-primary">Open</a>
-                                    <a href="{{ url_for('contacts.removefolder', name=data.folder_name) }}" class="btn btn-outline-danger" >Remove</a>
+                                    <a href="{{ url_for('contacts.remove', id=data.id) }}" class="btn btn-outline-danger">Remove</a>
                                 </div>
                             </td>
                         </tr>
@@ -55,12 +56,12 @@
                             <li class="page-item">
                                 <a 
                                 class="page-link{% if not pagination.has_prev %} disabled{% endif %}" 
-                                href="{% if pagination.has_prev %}{{ url_for('contacts.index', page=pagination.prev_num) }}{%else%}#{% endif %}">Prev</a>
+                                href="{% if pagination.has_prev %}{{ url_for('contacts.folder', page=pagination.prev_num) }}{%else%}#{% endif %}">Prev</a>
                             </li>
                             <li class="page-item">
                                 <a 
                                 class="page-link{% if not pagination.has_next %} disabled{% endif %}" 
-                                href="{% if pagination.has_next %}{{ url_for('contacts.index', page=pagination.next_num) }}{%else%}#{% endif %}">Next</a>
+                                href="{% if pagination.has_next %}{{ url_for('contacts.folder', page=pagination.next_num) }}{%else%}#{% endif %}">Next</a>
                             </li>
                         </ul>
                     </nav>

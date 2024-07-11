@@ -31,13 +31,18 @@ class Users(db.Model, Serialize):
 class Contacts(db.Model, Serialize):
     __tablename__ = 'contacts'
     id: Mapped[int] = mapped_column(primary_key=True)
+    folder_name: Mapped[str]
     phonenumber: Mapped[str]
+
+    def groupBy(page: int = 1):
+        return Contacts.query.with_entities(Contacts.folder_name) \
+                    .group_by(Contacts.folder_name) \
+                    .paginate(page=page, per_page=10, error_out=False)
     
 
 class Templates(db.Model, Serialize):
     __tablename__ = 'templates'
     id: Mapped[int] = mapped_column(primary_key=True)
-    folder_name: Mapped[str]
     messages: Mapped[str]
 
 
@@ -73,4 +78,5 @@ class ThreadingStatus(db.Model, Serialize):
     is_active: Mapped[bool] = mapped_column(default=False)
     completed: Mapped[bool] = mapped_column(default=False)
     size: Mapped[int]
-    current_process: Mapped[int]
+    success_count: Mapped[int]
+    failed_count: Mapped[int]

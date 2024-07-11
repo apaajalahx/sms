@@ -9,15 +9,28 @@ from io import BytesIO
 @contacts.get("")
 def index():
     page = request.args.get('page', 1, type=int)
-    contact = Contacts.query.paginate(page=page, per_page=10, error_out=False)
+    contact = Contacts.groupBy(page)
     return render_template('dashboard/contacts/index.html', items=contact.items, pagination=contact)
+
+@contacts.get("/folder/<string:name>")
+def folder(name):
+    page = request.args.get('page', 1, type=int)
+    contact = Contacts.query.filter(Contacts.folder_name == name).paginate(page=page, per_page=10, error_out=False)
+    return render_template('dashboard/contacts/folder.html', items=contact.items, pagination=contact)
 
 @contacts.get('/import')
 def importcontact():
-    return render_template('dashboard/contacts/import.html')
+    foldername = request.args.get('folder')
+    return render_template('dashboard/contacts/import.html', folder=foldername)
 
 @contacts.post('/import')
 def importaction():
+    foldername = request.form.get('folder_name')
+
+    if foldername is None or foldername == '':
+        flash("Folder name cannot be empty", category='error')
+        return redirect(url_for('contacts.index'))
+    
     file = request.files.get('import')
     excel = pd.read_excel(BytesIO(file.stream.read()))
     to_dict = excel.to_dict()
@@ -50,4 +63,16 @@ def remove(id):
     except:
         db.session.rollback()
         flash('Failed Remove contact', category='error')
+    return redirect(url_for('contacts.index'))
+
+@contacts.get('/removefolder/<int:name>')
+def removefolder(name):
+    
+    try:
+        Contacts.query.filter(Contacts.folder_name == name).delete()
+        db.session.commit()
+        flash('Success Remove Folder', category='info')
+    except:
+        flash('Failed Remove Folder', category='error')
+        db.session.rollback()
     return redirect(url_for('contacts.index'))
