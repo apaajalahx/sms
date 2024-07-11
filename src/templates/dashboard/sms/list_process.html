@@ -1,0 +1,155 @@
+{% extends 'dashboard/base.html' %}
+
+{% block headerContent %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">List Current Process</h1>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+            <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center">Success Send</th>
+                        <th class="text-center">Failed Send</th>
+                        <th class="text-center">Current Process</th>
+                        <th class="text-center">Progress</th>
+                    </tr>
+                    </thead>
+                    <tbody id="body-of-process">
+                    </tbody>
+                    
+                </table>
+                </div>
+                <div id="no-process" class="card-footer clearfix">
+                    <p class="text-center">There is no ongoing process.</p>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block thirdparty %}
+
+<script>
+    $('document').ready(function(){
+
+        let current_process = [];
+
+        function insert(data) {
+            current_process.push(data.thread_name);
+            let percentage = parseInt(data.current_process/data.size * 100).toString();
+            $('#body-of-process').append(`
+                <tr id="${data.thread_name}-tr">
+                    <td class="text-center">${data.thread_name}</td>
+                    <td id="${data.thread_name}-completed" class="text-center">${data.completed}</td>
+                    <td id="${data.thread_name}-size" class="text-center">${data.size}</td>
+                    <td id="${data.thread_name}-success" class="text-center">${data.success}</td>
+                    <td id="${data.thread_name}-failed" class="text-center">${data.failed}</td>
+                    <td id="${data.thread_name}-current-process" class="text-center">${data.current_process}</td>
+                    <td>
+                        <div class="progress progress-xss">
+                            <div id="${data.thread_name}-progress" class="progress-bar progress-bar-danger" style="width: ${percentage}%"> ${percentage}%</div>
+                        </div>
+                    </td>
+                </tr>    
+            `);
+        }
+
+        function update(data) {
+            let percentage = parseInt(data.current_process/data.size * 100).toString();
+            $(`#${data.thread_name}-completed`).text(data.completed);
+            $(`#${data.thread_name}-size`).text(data.size);
+            $(`#${data.thread_name}-success`).text(data.success);
+            $(`#${data.thread_name}-failed`).text(data.failed);
+            $(`#${data.thread_name}-current-process`).text(data.current_process);
+            document.getElementById(`${data.thread_name}-progress`).style.width = percentage + '%';
+            $(`#${data.thread_name}-progress`).text(`${percentage}%`);
+        }
+
+        function has(name) {
+            if (current_process.includes(name)) {
+                return true;
+            }
+            return false;
+        }
+
+        function remove(name) {
+            if (current_process.includes(name)) {
+                current_process = current_process.filter(item => item !== name);
+                $(`#${name}-tr`).remove();
+            }
+        }
+
+        function compare(ar1, ar2) {
+            const com = []
+            for (key of ar1) {
+                if (!ar2.includes(key)) {
+                    com.push(key);
+                }
+            }
+            return com;
+        }
+
+        function load() {
+            let noProcess = $('#no-process');
+            $.ajax({
+                method: 'GET',
+                url: "{{ url_for('sms.apicurrentprocess') }}",
+                dataType: 'json',
+                accepts: 'application/json'
+            }).done((data) => {
+                let tmpCurrData = [];
+                if (data.length == 0) {
+                    noProcess.removeClass('d-none');
+                } else {
+                    noProcess.addClass('d-none');
+                    for(var i=0;i<=data.length - 1;i++) {
+                        if (typeof data[i] === undefined) {
+                            continue;
+                        }
+                        tmpCurrData.push(data[i].thread_name);
+                        if (has(data[i].thread_name)) {
+                            update(data[i]);
+                        } else {
+                            insert(data[i]);
+                        }
+                    }
+                }
+                let comp = compare(current_process, tmpCurrData);
+                comp.map((z) => {
+                    remove(z);
+                });
+            }).fail((ss, err) => {
+
+            });
+        }
+
+        setInterval(function() {
+            load();
+        }, 2500);
+    });
+</script>
+
+{% endblock %}

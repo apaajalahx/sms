@@ -1,6 +1,7 @@
 from src import init_app, db
+import os
 
-flask = init_app('development')
+flask = init_app(os.getenv('APP_ENV'))
 
 @flask.cli.command('migrate:fresh')
 def migrate_fresh():

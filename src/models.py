@@ -34,11 +34,15 @@ class Contacts(db.Model, Serialize):
     folder_name: Mapped[str]
     phonenumber: Mapped[str]
 
-    def groupBy(page: int = 1):
+    def groupBy(page: int = 1, per_page: int = 10):
         return Contacts.query.with_entities(Contacts.folder_name) \
                     .group_by(Contacts.folder_name) \
-                    .paginate(page=page, per_page=10, error_out=False)
-    
+                    .paginate(page=page, per_page=per_page, error_out=False)
+
+    def groupByAll():
+        return Contacts.query.query.with_entities(Contacts.folder_name) \
+                    .group_by(Contacts.folder_name) \
+                    .all()
 
 class Templates(db.Model, Serialize):
     __tablename__ = 'templates'
