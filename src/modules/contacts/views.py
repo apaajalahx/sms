@@ -4,6 +4,7 @@ from src import db
 from flask import render_template, request, redirect, url_for, flash
 import pandas as pd
 from io import BytesIO
+import traceback
 
 
 @contacts.get("")
@@ -16,11 +17,12 @@ def index():
 def folder(name):
     page = request.args.get('page', 1, type=int)
     contact = Contacts.query.filter(Contacts.folder_name == name).paginate(page=page, per_page=10, error_out=False)
-    return render_template('dashboard/contacts/folder.html', items=contact.items, pagination=contact)
+    return render_template('dashboard/contacts/folder.html', items=contact.items, pagination=contact, folder=name)
 
 @contacts.get('/import')
 def importcontact():
-    foldername = request.args.get('folder')
+    foldername = request.args.get('folder', type=str)
+    print(foldername)
     return render_template('dashboard/contacts/import.html', folder=foldername)
 
 @contacts.post('/import')
@@ -43,14 +45,17 @@ def importaction():
             value = '+' + value
         elif value[0] == '8':
             value = '+62' + value
-        contactList.append(Contacts(phonenumber=value))
+        print(value, foldername)
+        contactList.append(Contacts(phonenumber=value, folder_name=foldername))
+    print(contactList)
     try:
         db.session.add_all(contactList)
         db.session.commit()
-    except:
+        flash('Success Import Contacts', category='info')
+    except Exception as e:
+        traceback.print_exc()
         db.session.rollback()
     file.close()
-    flash('Success Import Contacts', category='info')
     return redirect(url_for('contacts.index'))
 
 @contacts.get('/remove/<int:id>')
@@ -65,7 +70,7 @@ def remove(id):
         flash('Failed Remove contact', category='error')
     return redirect(url_for('contacts.index'))
 
-@contacts.get('/removefolder/<int:name>')
+@contacts.get('/removefolder/<string:name>')
 def removefolder(name):
     
     try:

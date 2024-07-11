@@ -20,7 +20,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-start">
-                        <a href="{{ url_for('contacts.importcontact') }}" class="btn btn-outline-primary">Import</a>
+                        <a href="{{ url_for('contacts.importcontact', folder=folder) }}" class="btn btn-outline-primary">Import</a>
                         <!-- <a href="" class="btn btn-outline-primary" style="margin-left: 10px;">Export</a> -->
                     </div>
                 </div>
@@ -56,12 +56,12 @@
                             <li class="page-item">
                                 <a 
                                 class="page-link{% if not pagination.has_prev %} disabled{% endif %}" 
-                                href="{% if pagination.has_prev %}{{ url_for('contacts.folder', page=pagination.prev_num) }}{%else%}#{% endif %}">Prev</a>
+                                href="{% if pagination.has_prev %}{{ url_for('contacts.folder', name=folder, page=pagination.prev_num) }}{%else%}#{% endif %}">Prev</a>
                             </li>
                             <li class="page-item">
                                 <a 
                                 class="page-link{% if not pagination.has_next %} disabled{% endif %}" 
-                                href="{% if pagination.has_next %}{{ url_for('contacts.folder', page=pagination.next_num) }}{%else%}#{% endif %}">Next</a>
+                                href="{% if pagination.has_next %}{{ url_for('contacts.folder', name=folder, page=pagination.next_num) }}{%else%}#{% endif %}">Next</a>
                             </li>
                         </ul>
                     </nav>
