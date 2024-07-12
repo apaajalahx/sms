@@ -2,24 +2,23 @@ from queue import Queue
 from time import sleep
 from .models import ThreadingStatus
 from .sms import SMS
-
+from src import db, init_app
+import os
 QueueList = dict()
 
+app = init_app(os.getenv('APP_ENV'))
+
 def sendSms(name: str, body: str, account_id: int, account_type: str, q: Queue):
-    from src import db, init_app
-    import os
-    app = init_app(os.getenv('APP_ENV'))
+
     with app.app_context():
         
         sms = SMS(account_id=account_id, type=account_type)
-    
         if sms.errors['error']:
             print(sms.errors['reason'])
             return False
         
         while not q.empty():
             record = q.get()
-            print("Current Task {}".format(record))
             q.task_done()
             success = 0
             failed = 0
@@ -34,7 +33,6 @@ def sendSms(name: str, body: str, account_id: int, account_type: str, q: Queue):
             sleep(1)
 
         print("Thread {} Completed !!!".format(name))
-
         if name in QueueList:
             thread = ThreadingStatus.query.filter(ThreadingStatus.name == name).first()
             if thread is not None:
