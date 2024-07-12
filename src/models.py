@@ -84,3 +84,18 @@ class ThreadingStatus(db.Model, Serialize):
     size: Mapped[int]
     success_count: Mapped[int]
     failed_count: Mapped[int]
+    Account_type: Mapped[str]
+    Account_id: Mapped[int]
+
+    def getRelationship(id: int):
+        thread = ThreadingStatus.query.filter(ThreadingStatus.id == id).first()
+        ret = {'thread' : thread, 'aws' : None, 'twilio' : None, 'vonage' : None}
+        if thread is not None:
+            if thread.Account_type == 'aws':
+                ret['aws'] = AwsSetting.query.filter(AwsSetting.id == thread.Account_id).first()
+            elif thread.Account_type == 'vonage':
+                ret['vonage'] = NexmoVonage.query.filter(NexmoVonage.id == thread.Account_id).first()
+            elif thread.Account_type == 'twilio':
+                ret['twilio'] = Twilio.query.filter(Twilio.id == thread.Account_id).first()
+
+        return ret
