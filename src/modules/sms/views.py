@@ -1,5 +1,5 @@
 from . import sms
-from flask import render_template, redirect, url_for, flash, jsonify, request
+from flask import render_template, redirect, url_for, flash, jsonify, request, Flask
 from src.worker import sendSms, QueueList
 from queue import Queue
 from threading import Thread
@@ -8,6 +8,7 @@ from src.models import Contacts, ThreadingStatus, AwsSetting, Twilio, NexmoVonag
 from random import randrange
 from src import db
 
+app = Flask(__name__)
 
 @sms.get('/')
 def index():
@@ -90,10 +91,11 @@ def addprocess():
                                 Account_id=provider_id)
         db.session.add(saved)
         db.session.commit()
-        worker = Thread(target=sendSms, args=(thread_name, msg.messages, provider_id, provider_type, q))
-        worker.daemon = True
-        worker.name = thread_name
-        worker.start()
+        with app.app_context():
+            worker = Thread(target=sendSms, args=(thread_name, msg.messages, provider_id, provider_type, q))
+            worker.daemon = True
+            worker.name = thread_name
+            worker.start()
         flash('Success add new Process', category='info')
     except:
         flash('Failed add new Process', category='error')
