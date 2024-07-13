@@ -32,7 +32,7 @@ def importaction():
     if foldername is None or foldername == '':
         flash("Folder name cannot be empty", category='error')
         return redirect(url_for('contacts.index'))
-    
+    foldername = foldername.replace(' ', '')
     file = request.files.get('import')
     excel = pd.read_excel(BytesIO(file.stream.read()))
     to_dict = excel.to_dict()
@@ -45,9 +45,7 @@ def importaction():
             value = '+' + value
         elif value[0] == '8':
             value = '+62' + value
-        print(value, foldername)
         contactList.append(Contacts(phonenumber=value, folder_name=foldername))
-    print(contactList)
     try:
         db.session.add_all(contactList)
         db.session.commit()

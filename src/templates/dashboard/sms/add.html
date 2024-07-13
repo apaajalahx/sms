@@ -37,15 +37,15 @@
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="form-group">
                       <label for="contactsFolder">Contacts Folder</label>
-                        <select name="provider">
+                        <select class="form-control" name="folder_name">
                           {% for data in items %}
-                          <option value="{{ data.id }}">{{ data.folder_name }}</option>
+                          <option value="{{ data.folder_name }}">{{ data.folder_name }}</option>
                           {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
                       <label for="template">Template</label>
-                        <select name="provider">
+                        <select class="form-control" name="template_id">
                           {% for data in templates %}
                           <option value="{{ data.id }}">{{ data.messages[0:10] }} ...</option>
                           {% endfor %}
@@ -53,7 +53,7 @@
                     </div>
                     <div class="form-group">
                       <label for="provider">Provider</label>
-                        <select name="provider">
+                        <select class="form-control" name="provider">
                             {% for data in aws %}
                             <option value="{{ data.id }},aws">{{ data.aws_access_key }} - {{ data.aws_region }}</option>
                             {% endfor %}

@@ -40,7 +40,7 @@ class Contacts(db.Model, Serialize):
                     .paginate(page=page, per_page=per_page, error_out=False)
 
     def groupByAll():
-        return Contacts.query.query.with_entities(Contacts.folder_name) \
+        return Contacts.query.with_entities(Contacts.folder_name) \
                     .group_by(Contacts.folder_name) \
                     .all()
 

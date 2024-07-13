@@ -7,8 +7,7 @@ import threading
 from src.models import Contacts, ThreadingStatus, AwsSetting, Twilio, NexmoVonage, Templates
 from random import randrange
 from src import db
-
-app = Flask(__name__)
+import traceback
 
 @sms.get('/')
 def index():
@@ -91,12 +90,14 @@ def addprocess():
                                 Account_id=provider_id)
         db.session.add(saved)
         db.session.commit()
-        with app.app_context():
-            worker = Thread(target=sendSms, args=(thread_name, msg.messages, provider_id, provider_type, q))
-            worker.daemon = True
-            worker.name = thread_name
-            worker.start()
+        worker = Thread(target=sendSms, args=(thread_name, msg.messages, provider_id, provider_type, q))
+        worker.daemon = True
+        worker.name = thread_name
+        worker.start()
         flash('Success add new Process', category='info')
     except:
+        traceback.print_exc()
+        saved.is_active=False
+        db.session.commit()
         flash('Failed add new Process', category='error')
     return redirect(url_for('sms.currentprocess'))
