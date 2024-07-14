@@ -4,6 +4,7 @@
 Support Provider : AWS, Twilio And Vonage (nexmo)
 
 python version : 3.10.11
+
 postgres version : PostgreSQL 16.1
 
 
@@ -19,6 +20,7 @@ rename .env.example into .env
 change SECRET_KEY and WTF_CSRF_SECRET_KEY 
 
 for production stage change APP_ENV=development to production
+
 
 Migrate database
 
@@ -44,6 +46,7 @@ db.session.add(user)
 db.session.commit()
 ```
 
+
 Run application
 
 ```
@@ -53,4 +56,6 @@ or
 ```
 python app.py
 ```
+
+
 for production make sure using other server handler like gunicorn, waitress, etc.
