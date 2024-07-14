@@ -15,7 +15,9 @@ pip install -r requirements.txt
 ```
 
 rename .env.example into .env
+
 change SECRET_KEY and WTF_CSRF_SECRET_KEY 
+
 for production stage change APP_ENV=development to production
 
 Migrate database
